@@ -9,3 +9,28 @@ Some problems:
 - there are spaces in the column names which might make things more complicated
 - -9 is used for NA
 - one of the publication years is negative
+
+Example code to clean up the csv:
+```
+library(tidyverse)
+df <-read_csv('./Dinosaurs.csv', col_types = cols(
+    Genus = col_character(),
+    Length = col_character(),
+    Weight = col_character(),
+    `Best base` = col_character(),
+    Citation_year = col_character()), 
+    na = c('NA', '-9')
+)
+
+clean_df <- df %>% 
+    mutate(Length = str_remove(Length, 'm')) %>% 
+    mutate(Length = as.numeric(Length)) %>% 
+    mutate(Weight = str_remove(Weight, 't')) %>% 
+    mutate(Weight = as.numeric(Weight)) %>% 
+    separate(col = Citation_year, sep='_', into=c('Author', 'Year')) %>% 
+    mutate(Year = as.numeric(Year)) %>% 
+    mutate(Year = abs(Year))
+
+# now code like the following is possible
+clean_df %>% ggplot(aes(x = Year, y = Length)) + geom_point()
+```
