@@ -23,13 +23,13 @@ df <-read_csv('./Dinosaurs.csv', col_types = cols(
 )
 
 clean_df <- df %>% 
-    mutate(Length = str_remove(Length, 'm')) %>% 
-    mutate(Length = as.numeric(Length)) %>% 
-    mutate(Weight = str_remove(Weight, 't')) %>% 
-    mutate(Weight = as.numeric(Weight)) %>% 
+    mutate(Length = str_remove(Length, 'm'), 
+           Length = as.numeric(Length), 
+           Weight = str_remove(Weight, 't'), 
+           Weight = as.numeric(Weight)) %>% 
     separate(col = Citation_year, sep='_', into=c('Author', 'Year')) %>% 
-    mutate(Year = as.numeric(Year)) %>% 
-    mutate(Year = abs(Year))
+    mutate(Year = as.numeric(Year), 
+           Year = abs(Year))
 
 # now code like the following is possible
 clean_df %>% ggplot(aes(x = Year, y = Length)) + geom_point()
